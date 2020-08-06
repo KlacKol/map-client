@@ -113,7 +113,7 @@ const Layout = ({children}) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Persistent drawer
+                        History map
                     </Typography>
                 </Toolbar>
             </AppBar>
