@@ -1,15 +1,13 @@
 import React, {useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import moment from "moment";
 import {generateRandomMarker} from "../services/MapService";
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,21 +39,27 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(8),
     }
 }));
+ValidatorForm.addValidationRule('isDate', (value) => value <= moment().format('YYYY-MM-DD'));
+console.log('work')
 
 const CreateMarker = () => {
 
     const classes = useStyles();
     const [description, setDescription] = useState('');
-    const [lat, setLat] = useState(0);
-    const [lng, setLng] = useState(0);
-    const [date, setDate] = useState(new Date());
+    const [lat, setLat] = useState();
+    const [lng, setLng] = useState();
+    const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const formRef = useRef('form');
+    const inputRef = useRef('input');
 
     const handlerSubmit = (e) => {
         e.preventDefault();
+
+
     };
 
-
+    const test = () => {
+    }
 
     return (
         <Grid
@@ -115,13 +119,17 @@ const CreateMarker = () => {
                             validators={['required', 'minStringLength:20', 'maxStringLength:100']}
                             errorMessages={['this field is required', 'minimum 20 characters', 'maximum 100 characters']}
                             />
-                            <TextField
-                                id="date"
-                                label="date"
-                                type="date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                            <TextValidator
+                                label='date'
+                                name='date'
+                                type='date'
+                                key='date'
+                                value={date}
+                                ref={inputRef}
+                                InputLabelProps={{shrink: true}}
+                                onChange={({ target: {value}}) => setDate(value)}
+                                validators={['isDate']}
+                                errorMessages={['date cant be more of now']}
                             />
                             <Button
                                 type="submit"
