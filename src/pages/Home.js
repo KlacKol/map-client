@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef} from "react";
 import {Map, TileLayer, Marker, Popup} from "react-leaflet";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import SearchIcon from '@material-ui/icons/Search';
@@ -48,6 +48,7 @@ const Home = () => {
             <Map
                 center={mapFilter.location}
                 zoom={10}
+                tap={true}
                 ref={mapRef}
                 onViewportChanged={handleChangeViewPort}
             >

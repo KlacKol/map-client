@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import moment from "moment";
-import {generateRandomMarker} from "../services/MapService";
+import {createMarker, generateRandomMarker} from "../services/MapService";
+import {Map, Marker, TileLayer} from "react-leaflet";
 
 
 
@@ -40,26 +41,28 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 ValidatorForm.addValidationRule('isDate', (value) => value <= moment().format('YYYY-MM-DD'));
-console.log('work')
 
 const CreateMarker = () => {
 
     const classes = useStyles();
+    const [showMarker, setShowMarker] = useState(null);
     const [description, setDescription] = useState('');
-    const [lat, setLat] = useState();
-    const [lng, setLng] = useState();
+    const [lat, setLat] = useState(0);
+    const [lng, setLng] = useState(0);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const formRef = useRef('form');
-    const inputRef = useRef('input');
 
-    const handlerSubmit = (e) => {
-        e.preventDefault();
-
-
+    const handlerSubmit = async () => {
+        const data = {lat,lng,description,date};
+        await createMarker(data)
+            .catch(e => console.log(e));
     };
 
-    const test = () => {
-    }
+    const addMarker = (e) => {
+        setShowMarker(e.latlng);
+        setLat(e.latlng.lat);
+        setLng(e.latlng.lng);
+    };
 
     return (
         <Grid
@@ -96,6 +99,7 @@ const CreateMarker = () => {
                             <TextValidator
                                 label='lat'
                                 name='lat'
+                                InputLabelProps={{shrink: true}}
                                 value={lat}
                                 onChange={({ target: {value}}) => setLat(value)}
                                 validators={['required', 'minNumber:-90', 'maxNumber:90']}
@@ -105,6 +109,7 @@ const CreateMarker = () => {
                             <TextValidator
                                 label='lng'
                                 name='lng'
+                                InputLabelProps={{shrink: true}}
                                 value={lng}
                                 onChange={({ target: {value}}) => setLng(value)}
                                 validators={['required', 'minNumber:-180', 'maxNumber:180']}
@@ -116,8 +121,8 @@ const CreateMarker = () => {
                             name='description'
                             value={description}
                             onChange={({ target: {value}}) => setDescription(value)}
-                            validators={['required', 'minStringLength:20', 'maxStringLength:100']}
-                            errorMessages={['this field is required', 'minimum 20 characters', 'maximum 100 characters']}
+                            validators={['required', 'minStringLength:20', 'maxStringLength:100', 'trim']}
+                            errorMessages={['this field is required', 'minimum 20 characters', 'maximum 100 characters', 'the field cannot contain spaces']}
                             />
                             <TextValidator
                                 label='date'
@@ -125,7 +130,6 @@ const CreateMarker = () => {
                                 type='date'
                                 key='date'
                                 value={date}
-                                ref={inputRef}
                                 InputLabelProps={{shrink: true}}
                                 onChange={({ target: {value}}) => setDate(value)}
                                 validators={['isDate']}
@@ -143,6 +147,20 @@ const CreateMarker = () => {
                         </ValidatorForm>
                     </div>
                 </div>
+            </Grid>
+            <Grid item xs={6}>
+                <Map
+                    tap={true}
+                    center={[50.0042617, 36.2034271]}
+                    zoom={10}
+                    onClick={addMarker}
+                >
+                    <TileLayer
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    {showMarker && <Marker position={showMarker} />}
+                </Map>
             </Grid>
         </Grid>
 

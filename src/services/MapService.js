@@ -6,6 +6,10 @@ export const getAllMarker = () => {
     return axios.get(`${api}/map`)
 };
 
+export const createMarker = (data) => {
+    return axios.post(`${api}/map/create`, data)
+};
+
 export const generateRandomMarker = () => {
     return  axios.get(`${api}/map/generate/random`)
 };
