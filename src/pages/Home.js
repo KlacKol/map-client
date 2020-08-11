@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Map, TileLayer, Marker, Popup} from "react-leaflet";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import SearchIcon from '@material-ui/icons/Search';
@@ -14,7 +14,7 @@ const mapFilter = {
 const Home = () => {
     const dispatch = useDispatch();
     const mapRef = useRef();
-    const [dateValue, setDateValue] = React.useState(mapFilter.date);
+    const [dateValue, setDateValue] = useState(mapFilter.date);
     useEffect(() => {
         // navigator.geolocation.getCurrentPosition(({coords}) =>  {
         //     const currentPosition = [coords.latitude, coords.longitude];
@@ -28,19 +28,19 @@ const Home = () => {
         setDateValue(newValue);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         mapFilter.date = dateValue;
-        await handleChangeViewPort();
+        handleChangeViewPort();
     };
 
-    const handleChangeViewPort = async () => {
+    const handleChangeViewPort = () => {
         const bounds = mapRef.current.leafletElement.getBounds();
         const data = {
             topLeft: bounds.getNorthWest(),
             bottomRight: bounds.getSouthEast(),
             date: mapFilter.date
         };
-        await dispatch(getFilterMarker(data));
+        dispatch(getFilterMarker(data));
     };
 
     return (

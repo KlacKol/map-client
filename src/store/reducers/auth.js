@@ -1,25 +1,25 @@
-import {MAP_ERROR, MAP_SUCCESS_GET, MAP_START_LOAD} from "../actions/actionTypes";
+import {AUTH_SUCCESS, AUTH_ERROR, AUTH_START_LOAD} from "../actions/actionTypes";
 
 const initialState = {
-    markers: [],
+    user: {},
     loading: false,
     error: null,
 };
 
-export default function mapReducer(state = initialState, action) {
+export default function userReducer(state = initialState, action) {
     switch (action.type) {
-        case MAP_SUCCESS_GET:
+        case AUTH_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                markers: action.markers
+                user: action.user
             };
-        case MAP_START_LOAD:
+        case AUTH_START_LOAD:
             return {
                 ...state,
                 loading: true,
             };
-        case MAP_ERROR:
+        case AUTH_ERROR:
             return {
                 ...state,
                 loading: false,

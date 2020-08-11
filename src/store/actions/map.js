@@ -1,46 +1,37 @@
-import {ERROR, MAP_SUCCESS_GET, START_LOAD} from "./actionTypes";
-import {getAllMarker, searchOnDate} from "../../services/MapService";
-
-export function getMaps() {
-    return async (dispatch) => {
-        dispatch(startLoading());
-        try {
-            const data = await getAllMarker();
-            dispatch(mapsSuccessGet(data))
-        } catch (e) {
-            dispatch(mapError(e));
-        }
-    }
-}
+import {MAP_ERROR, MAP_SUCCESS_GET, MAP_START_LOAD} from "./actionTypes";
+import {searchOnDate} from "../../services/MapService";
 
 export function getFilterMarker(parameters) {
-    return async (dispatch) => {
-        dispatch(startLoading());
+    return (dispatch) => {
+        dispatch(MapStartLoading());
         try {
-            const data = await searchOnDate(parameters);
-            dispatch(mapsSuccessGet(data))
+            searchOnDate(parameters)
+                .then(data => {
+                dispatch(mapsSuccessGet(data));
+            })
+                .catch(e => dispatch(mapError(e)));
         } catch (e) {
             dispatch(mapError(e));
         }
     }
 }
 
-export function mapsSuccessGet(markers) {
+function mapsSuccessGet(markers) {
     return {
         type: MAP_SUCCESS_GET,
         markers,
     };
 }
 
-export function startLoading() {
+function MapStartLoading() {
     return {
-        type: START_LOAD,
+        type: MAP_START_LOAD,
     };
 }
 
-export function mapError(e) {
+function mapError(e) {
     return {
-        type: ERROR,
+        type: MAP_ERROR,
         error: e,
     }
 }

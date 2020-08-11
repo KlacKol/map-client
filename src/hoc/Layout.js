@@ -18,7 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
-import {PATH, PATH_ADD_MARKER} from "../routeList";
+import {PATH_ADD_MARKER, PATH_HOME} from "../routeList";
 
 const drawerWidth = 240;
 
@@ -133,7 +133,7 @@ const Layout = ({children}) => {
                 </div>
                 <Divider />
                 <List>
-                    <ListItem button component={Link} to={PATH}>
+                    <ListItem button component={Link} to={PATH_HOME}>
                         <ListItemIcon><HomeIcon/></ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>

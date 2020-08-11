@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import Button from "@material-ui/core/Button";
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import Grid from '@material-ui/core/Grid';
@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(8),
     }
 }));
+
 ValidatorForm.addValidationRule('isDate', (value) => value <= moment().format('YYYY-MM-DD'));
 
 const CreateMarker = () => {
@@ -50,12 +51,10 @@ const CreateMarker = () => {
     const [lat, setLat] = useState(0);
     const [lng, setLng] = useState(0);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
-    const formRef = useRef('form');
 
     const handlerSubmit = async () => {
         const data = {lat,lng,description,date};
-        await createMarker(data)
-            .catch(e => console.log(e));
+        await createMarker(data);
     };
 
     const addMarker = (e) => {
@@ -94,7 +93,6 @@ const CreateMarker = () => {
                             className={classes.form}
                             onSubmit={handlerSubmit}
                             onError={errors => console.log(errors)}
-                            ref={formRef}
                         >
                             <TextValidator
                                 label='lat'
