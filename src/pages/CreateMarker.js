@@ -8,6 +8,8 @@ import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import moment from "moment";
 import {createMarker, generateRandomMarker} from "../services/MapService";
 import {Map, Marker, TileLayer} from "react-leaflet";
+import {withRouter} from "react-router";
+import {PATH_HOME} from "../routeList";
 
 
 
@@ -43,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 ValidatorForm.addValidationRule('isDate', (value) => value <= moment().format('YYYY-MM-DD'));
 
-const CreateMarker = () => {
+const CreateMarker = ({history}) => {
 
     const classes = useStyles();
     const [showMarker, setShowMarker] = useState(null);
@@ -55,6 +57,7 @@ const CreateMarker = () => {
     const handlerSubmit = async () => {
         const data = {lat,lng,description,date};
         await createMarker(data);
+        history.push(PATH_HOME);
     };
 
     const addMarker = (e) => {
@@ -165,4 +168,4 @@ const CreateMarker = () => {
     )
 };
 
-export default CreateMarker;
+export default withRouter(CreateMarker);
