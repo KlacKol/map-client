@@ -1,4 +1,4 @@
-import {AUTH_SUCCESS, AUTH_ERROR, AUTH_START_LOAD} from "../actions/actionTypes";
+import {AUTH_SUCCESS, AUTH_ERROR, AUTH_START_LOAD, AUTH_LOGOUT} from "../actions/actionTypes";
 
 const initialState = {
     user: {},
@@ -25,6 +25,11 @@ export default function userReducer(state = initialState, action) {
                 loading: false,
                 error: action.error,
             };
+        case AUTH_LOGOUT:
+            return {
+                ...state,
+                user: {}
+            }
         default:
             return state;
     }

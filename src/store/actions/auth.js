@@ -1,5 +1,5 @@
-import {AUTH_ERROR, AUTH_SUCCESS, AUTH_START_LOAD} from "./actionTypes";
-import {loginUser} from "../../services/AuthService";
+import {AUTH_ERROR, AUTH_SUCCESS, AUTH_START_LOAD, AUTH_LOGOUT} from "./actionTypes";
+import {loginUser, registerUser} from "../../services/AuthService";
 
 
 export function logUser(parameters) {
@@ -8,12 +8,35 @@ export function logUser(parameters) {
             dispatch(userStartLoading());
             loginUser(parameters)
                 .then(({data}) => {
-                dispatch(authSuccess(data))
+                    localStorage.setItem('TOKEN', data.token);
+                    dispatch(authSuccess(data))
             })
                 .catch(e => dispatch(userError(e)))
         } catch (e) {
             dispatch(userError(e));
         }
+    }
+}
+
+export function regUser(parameters) {
+    return (dispatch) => {
+        try {
+            dispatch(userStartLoading());
+            registerUser(parameters)
+                .then(({data}) => {
+                    localStorage.setItem('TOKEN', data.token);
+                    dispatch(authSuccess(data))
+                })
+                .catch(e => dispatch(userError(e)))
+        } catch (e) {
+            dispatch(userError(e));
+        }
+    }
+}
+
+export function logout() {
+    return {
+        type: AUTH_LOGOUT,
     }
 }
 

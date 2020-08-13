@@ -42,12 +42,20 @@ const SignIn = ({history}) => {
     const dispatch = useDispatch();
     const data = useSelector(res => res.user.user.token, shallowEqual);
 
+
+
+
     const handlerSubmit = (e) => {
         e.preventDefault();
-        const result = {name: emailOrName, password};
+        const check = isEmailOrName(emailOrName);
+        const result = {[check]: emailOrName, password};
         dispatch(logUser(result));
     };
 
+    const isEmailOrName = (val) => {
+        const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        return val.match(mailFormat) ? 'email' : 'name';
+    };
 
     if (data) {
         return <Redirect to={PATH_HOME} />
@@ -66,7 +74,6 @@ const SignIn = ({history}) => {
                 <ValidatorForm
                     className={classes.form}
                     onSubmit={handlerSubmit}
-                    onError={errors => console.log(errors)}
                 >
                     <TextValidator
                         label='Email address or name'

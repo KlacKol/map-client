@@ -18,7 +18,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {useDispatch, useSelector} from "react-redux";
+
 import {PATH_ADD_MARKER, PATH_HOME} from "../routeList";
+import {logout} from "../store/actions/auth";
+
 
 const drawerWidth = 240;
 
@@ -84,6 +89,8 @@ const Layout = ({children}) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+    const token = useSelector(res => res.user.user.token);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -95,54 +102,62 @@ const Layout = ({children}) => {
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
+            {token ? (
+                <>
+                    <CssBaseline />
+                    <AppBar
+                        position="fixed"
+                        className={clsx(classes.appBar, {
+                            [classes.appBarShift]: open,
+                        })}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        History map
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>
-                    <ListItem button component={Link} to={PATH_HOME}>
-                        <ListItemIcon><HomeIcon/></ListItemIcon>
-                        <ListItemText primary="Home" />
-                    </ListItem>
-                    <ListItem button component={Link} to={PATH_ADD_MARKER}>
-                        <ListItemIcon><AddIcon/></ListItemIcon>
-                        <ListItemText primary="Add new marker" />
-                    </ListItem>
-                </List>
-            </Drawer>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, open && classes.hide)}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap>
+                                History map
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        className={classes.drawer}
+                        variant="persistent"
+                        anchor="left"
+                        open={open}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                    >
+                        <div className={classes.drawerHeader}>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        <List>
+                            <ListItem button component={Link} to={PATH_HOME}>
+                                <ListItemIcon><HomeIcon/></ListItemIcon>
+                                <ListItemText primary="Home" />
+                            </ListItem>
+                            <ListItem button component={Link} to={PATH_ADD_MARKER}>
+                                <ListItemIcon><AddIcon/></ListItemIcon>
+                                <ListItemText primary="Add new marker" />
+                            </ListItem>
+                            <ListItem button onClick={() => dispatch(logout())}>
+                                <ListItemIcon><ExitToAppIcon/></ListItemIcon>
+                                <ListItemText primary="Logout" />
+                            </ListItem>
+                        </List>
+                    </Drawer>
+                </>
+            ) : null}
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: open,
