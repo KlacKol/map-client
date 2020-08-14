@@ -7,11 +7,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {NavLink, Redirect} from 'react-router-dom';
-import { withRouter } from "react-router";
-import {PATH_AUTH_LOGIN, PATH_HOME} from "../../routeList";
+import {NavLink} from 'react-router-dom';
+import {PATH_AUTH_LOGIN} from "../../routeList";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {regUser} from "../../store/actions/auth";
 
 
@@ -35,14 +34,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignUp = (props) => {
+const SignUp = () => {
     const classes = useStyles();
 
     const [name, nameChangeHandler] = useState('');
     const [email, emailChangeHandler] = useState('');
     const [password, passwordChangeHandler] = useState('');
     const dispatch = useDispatch();
-    const data = useSelector(res => res.user.user.token, shallowEqual);
 
 
     const handlerSubmit = (e) => {
@@ -50,11 +48,6 @@ const SignUp = (props) => {
         const result = {name, email, password};
         dispatch(regUser(result));
     };
-
-    if (data) {
-        return <Redirect to={PATH_HOME} />
-    }
-
 
     return (
         <Container component="main" maxWidth="xs">
@@ -135,4 +128,4 @@ const SignUp = (props) => {
     );
 };
 
-export default withRouter(SignUp)
+export default SignUp;

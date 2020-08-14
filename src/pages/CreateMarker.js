@@ -6,10 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import moment from "moment";
-import {createMarker, generateRandomMarker} from "../services/MapService";
+import {generateRandomMarker} from "../services/MapService";
 import {Map, Marker, TileLayer} from "react-leaflet";
-import {withRouter} from "react-router";
-import {PATH_HOME} from "../routeList";
+import {useDispatch} from "react-redux";
+import {mapCreateMarker} from "../store/actions/map";
 
 
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 ValidatorForm.addValidationRule('isDate', (value) => value <= moment().format('YYYY-MM-DD'));
 
-const CreateMarker = ({history}) => {
+const CreateMarker = () => {
 
     const classes = useStyles();
     const [showMarker, setShowMarker] = useState(null);
@@ -53,11 +53,11 @@ const CreateMarker = ({history}) => {
     const [lat, setLat] = useState(0);
     const [lng, setLng] = useState(0);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+    const dispatch = useDispatch();
 
-    const handlerSubmit = async () => {
+    const handlerSubmit = () => {
         const data = {lat,lng,description,date};
-        await createMarker(data);
-        history.push(PATH_HOME);
+        dispatch(mapCreateMarker(data));
     };
 
     const addMarker = (e) => {
@@ -164,8 +164,7 @@ const CreateMarker = ({history}) => {
                 </Map>
             </Grid>
         </Grid>
-
     )
 };
 
-export default withRouter(CreateMarker);
+export default CreateMarker;

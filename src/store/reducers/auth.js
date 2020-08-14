@@ -1,9 +1,18 @@
 import {AUTH_SUCCESS, AUTH_ERROR, AUTH_START_LOAD, AUTH_LOGOUT} from "../actions/actionTypes";
+import {getToken} from "../../services/LocalStorageService";
 
-const initialState = {
+
+let user = getToken();
+const initialState = user ? {
+    loggedIn: true,
+    user,
+    loading: false,
+    error: null
+} : {
+    loggedIn: false,
     user: {},
     loading: false,
-    error: null,
+    error: null
 };
 
 export default function userReducer(state = initialState, action) {
@@ -11,6 +20,7 @@ export default function userReducer(state = initialState, action) {
         case AUTH_SUCCESS:
             return {
                 ...state,
+                loggedIn: true,
                 loading: false,
                 user: action.user
             };
@@ -28,8 +38,9 @@ export default function userReducer(state = initialState, action) {
         case AUTH_LOGOUT:
             return {
                 ...state,
+                loggedIn: false,
                 user: {}
-            }
+            };
         default:
             return state;
     }

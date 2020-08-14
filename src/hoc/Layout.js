@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {useDispatch, useSelector} from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
 import {PATH_ADD_MARKER, PATH_HOME} from "../routeList";
 import {logout} from "../store/actions/auth";
@@ -90,7 +90,7 @@ const Layout = ({children}) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
-    const token = useSelector(res => res.user.user.token);
+    const token = useSelector(res => res.user.loggedIn, shallowEqual);
 
     const handleDrawerOpen = () => {
         setOpen(true);

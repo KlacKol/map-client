@@ -2,16 +2,15 @@ import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {NavLink, Redirect} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { withRouter } from "react-router";
-import {PATH_AUTH_REGISTRATION, PATH_HOME} from "../../routeList";
+import {PATH_AUTH_REGISTRATION} from "../../routeList";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {logUser} from "../../store/actions/auth";
 
 
@@ -35,14 +34,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignIn = ({history}) => {
+const SignIn = () => {
     const classes = useStyles();
     const [emailOrName, emailOrNameChangeHandler] = useState('');
     const [password, passwordChangeHandler] = useState('');
     const dispatch = useDispatch();
-    const data = useSelector(res => res.user.user.token, shallowEqual);
-
-
 
 
     const handlerSubmit = (e) => {
@@ -56,10 +52,6 @@ const SignIn = ({history}) => {
         const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         return val.match(mailFormat) ? 'email' : 'name';
     };
-
-    if (data) {
-        return <Redirect to={PATH_HOME} />
-    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -123,4 +115,4 @@ const SignIn = ({history}) => {
     );
 };
 
-export default withRouter(SignIn);
+export default SignIn;

@@ -7,8 +7,9 @@ import Slider from '@material-ui/core/Slider';
 import Button from "@material-ui/core/Button";
 import {getFilterMarker} from '../store/actions/map';
 
+
 const mapFilter = {
-    location: [50.0042617, 36.2034271], date: [1990, 2020],
+    location: [50.0042617, 36.2034271], date: [0, 2020],
 };
 
 const Home = () => {
@@ -23,6 +24,7 @@ const Home = () => {
         handleChangeViewPort();
     }, []);
     const data = useSelector(res => res.map.markers.data, shallowEqual);
+    const cha = useSelector(res => res.user.user, shallowEqual);
 
     const handleChangeDateSlider = (event, newValue) => {
         setDateValue(newValue);
@@ -42,6 +44,7 @@ const Home = () => {
         };
         dispatch(getFilterMarker(data));
     };
+    console.log(cha);
 
     return (
         <>

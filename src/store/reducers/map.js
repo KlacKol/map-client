@@ -1,4 +1,4 @@
-import {MAP_ERROR, MAP_SUCCESS_GET, MAP_START_LOAD} from "../actions/actionTypes";
+import {MAP_ERROR, MAP_SUCCESS_GET, MAP_START_LOAD, MAP_END_LOAD} from "../actions/actionTypes";
 
 const initialState = {
     markers: [],
@@ -18,6 +18,11 @@ export default function mapReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: true,
+            };
+        case MAP_END_LOAD:
+            return {
+                ...state,
+                loading: false
             };
         case MAP_ERROR:
             return {

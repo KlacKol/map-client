@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import {PATH_AUTH_LOGIN} from "./routeList";
-import {useSelector} from "react-redux";
+import {shallowEqual, useSelector} from "react-redux";
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
-    const token = useSelector(res => res.user.user.token);
+    const token = useSelector(res => res.user.loggedIn, shallowEqual);
     return (
         <Route
             {...rest}
