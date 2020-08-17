@@ -13,7 +13,7 @@ export function getFilterMarker(parameters) {
                 dispatch(mapsSuccessGet(data));
             })
                 .catch(e =>{
-                    dispatch(mapError(e));
+                dispatch(mapError(e));
                     if (e.response.status === 401) {
                         dispatch(logout());
                     }

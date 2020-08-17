@@ -1,6 +1,6 @@
 import {AUTH_ERROR, AUTH_SUCCESS, AUTH_START_LOAD, AUTH_LOGOUT} from "./actionTypes";
 import {loginUser, registerUser} from "../../services/AuthService";
-import {clearToken, getToken, setToken} from "../../services/LocalStorageService";
+import {clearRefreshToken, clearToken, getToken, setRefreshToken, setToken} from "../../services/LocalStorageService";
 import {history} from "../../helpers/history";
 import {PATH_HOME} from "../../routeList";
 import jwtDecode from 'jwt-decode';
@@ -11,8 +11,10 @@ export function logUser(parameters) {
             dispatch(userStartLoading());
             loginUser(parameters)
                 .then(({data}) => {
-                    setToken(data);
+                    setToken(data.token);
+                    setRefreshToken(data.refreshToken);
                     const user = jwtDecode(getToken());
+                    console.log(data)
                     dispatch(authSuccess(user));
                     history.push(PATH_HOME)
             })
@@ -42,6 +44,7 @@ export function regUser(parameters) {
 
 export function logout() {
     clearToken();
+    clearRefreshToken();
     return {
         type: AUTH_LOGOUT,
     }

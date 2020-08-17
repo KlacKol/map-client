@@ -10,6 +10,7 @@ export const registerUser = (data) => {
     return axios.post(`${api}/registration`, data)
 };
 
-export const getRefresToken = (data) => {
+export const updateTokens = (data) => {
+    console.log(data);
     return axios.post(`${api}/refresh`, data)
-}
+};

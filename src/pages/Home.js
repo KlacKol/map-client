@@ -44,7 +44,6 @@ const Home = () => {
         };
         dispatch(getFilterMarker(data));
     };
-    console.log(cha);
 
     return (
         <>
