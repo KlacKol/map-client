@@ -11,20 +11,16 @@ import {getFilterMarker} from '../store/actions/map';
 const mapFilter = {
     location: [50.0042617, 36.2034271], date: [0, 2020],
 };
+let timer;
 
 const Home = () => {
     const dispatch = useDispatch();
     const mapRef = useRef();
     const [dateValue, setDateValue] = useState(mapFilter.date);
     useEffect(() => {
-        // navigator.geolocation.getCurrentPosition(({coords}) =>  {
-        //     const currentPosition = [coords.latitude, coords.longitude];
-        //     setUserPosition(currentPosition)
-        // });
         handleChangeViewPort();
     }, []);
     const data = useSelector(res => res.map.markers.data, shallowEqual);
-    const cha = useSelector(res => res.user.user, shallowEqual);
 
     const handleChangeDateSlider = (event, newValue) => {
         setDateValue(newValue);
@@ -43,6 +39,24 @@ const Home = () => {
             date: mapFilter.date
         };
         dispatch(getFilterMarker(data));
+    };
+
+    const handlePlay = () => {
+        let i = dateValue[0];
+            function f() {
+                timer = setTimeout(() => {
+                        setDateValue([i, dateValue[1]]);
+                        i++;
+                        if (i < mapFilter.date[1]) {
+                            f();
+                        }
+                }, 10, 0)
+            }
+            f();
+    };
+
+    const handleStop = () => {
+        clearTimeout(timer);
     };
 
     return (
@@ -68,13 +82,27 @@ const Home = () => {
             </Map>
             <div className="bottom-map">
                 <div className="bottom-map-slider">
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={handlePlay}
+                    >
+                        play
+                    </Button>
+                    <Button
+                        onClick={handleStop}
+                        color="primary"
+                        variant="contained"
+                    >
+                        stop
+                    </Button>
                     <Typography id="range-slider" gutterBottom>
                         Date range
                     </Typography>
                     <Slider
                         value={dateValue}
                         onChange={handleChangeDateSlider}
-                        valueLabelDisplay="auto"
+                        valueLabelDisplay="on"
                         aria-labelledby="range-slider"
                         max={new Date().getFullYear()}
                     />

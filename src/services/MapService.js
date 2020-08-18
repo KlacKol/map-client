@@ -1,41 +1,36 @@
 import axios from 'axios';
-import {getRefreshToken, getToken} from "./LocalStorageService";
+import {getRefreshToken, getToken, setRefreshToken, setToken} from "./LocalStorageService";
 import jwtDecode from "jwt-decode";
 import {updateTokens} from "./AuthService";
 
 const api = process.env.REACT_APP_APP_API_URL + '/map';
 
-export const createMarker = async (data) => {
-    const token = getToken();
-    const refreshToken = getRefreshToken();
-    let date = Date.now();
-    const user = jwtDecode(token);
-    if (user && date <= user.exp) {
-        console.log('work')
-        await updateTokens({token, refreshToken}).then(res => {
-          console.log(res, 'EEEEEEEEEEEEEEEEEEEEEEEE');
-        })
-    }
-    return await axios.post(`${api}/create`, data)
+export const createMarker = async (res) => {
+    return await helper(res, 'create');
 
 };
 
-export const generateRandomMarker = () => {
+export const generateRandomMarker = async () => {
     return  axios.get(`${api}/generate/random`)
 };
 
-export const searchOnDate = async (data) => {
+export const searchOnDate = async (res) => {
+    return await helper(res, 'search');
+};
+
+const helper = async (res, path) => {
     const token = getToken();
     const refreshToken = getRefreshToken();
-    let date = Date.now();
+    let date = Date.now() + 10;
     const user = jwtDecode(token);
-    if (user && date <= user.exp * 1000) {
-        console.log('a');
-        await updateTokens({token, refreshToken}).then(res => {
-            console.log(res);
+    if (user && date >= user.exp * 1000) {
+        return await updateTokens({token, refreshToken}).then(async({data}) => {
+            setToken(data.token);
+            setRefreshToken(data.refreshToken);
+            return await axios.post(`${api}/${path}`, res)
         })
     }
-    return await axios.post(`${api}/search`, data)
+    return await axios.post(`${api}/${path}`, res)
 };
 
 axios.interceptors.request.use(

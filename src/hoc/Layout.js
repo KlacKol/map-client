@@ -22,7 +22,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
 import {PATH_ADD_MARKER, PATH_HOME} from "../routeList";
-import {logout} from "../store/actions/auth";
+import {logoutUser} from "../store/actions/auth";
 
 
 const drawerWidth = 240;
@@ -150,7 +150,7 @@ const Layout = ({children}) => {
                                 <ListItemIcon><AddIcon/></ListItemIcon>
                                 <ListItemText primary="Add new marker" />
                             </ListItem>
-                            <ListItem button onClick={() => dispatch(logout())}>
+                            <ListItem button onClick={() => dispatch(logoutUser())}>
                                 <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                                 <ListItemText primary="Logout" />
                             </ListItem>

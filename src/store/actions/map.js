@@ -1,6 +1,6 @@
 import {MAP_ERROR, MAP_SUCCESS_GET, MAP_START_LOAD, MAP_END_LOAD} from "./actionTypes";
 import {createMarker, searchOnDate} from "../../services/MapService";
-import {logout} from "./auth";
+import {logoutUser} from "./auth";
 import {history} from "../../helpers/history";
 import {PATH_HOME} from "../../routeList";
 
@@ -14,8 +14,8 @@ export function getFilterMarker(parameters) {
             })
                 .catch(e =>{
                 dispatch(mapError(e));
-                    if (e.response.status === 401) {
-                        dispatch(logout());
+                    if (e.response.status && e.response.status === 401) {
+                        dispatch(logoutUser());
                     }
                 });
         } catch (e) {
@@ -35,8 +35,8 @@ export function mapCreateMarker(parameters) {
                 })
                 .catch(e =>{
                     dispatch(mapError(e));
-                    if (e.response.status === 401) {
-                        dispatch(logout());
+                    if (e.response.status && e.response.status === 401) {
+                        dispatch(logoutUser());
                     }
                 });
         } catch (e) {
