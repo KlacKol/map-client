@@ -10,6 +10,7 @@ import {generateRandomMarker} from "../services/MapService";
 import {Map, Marker, TileLayer} from "react-leaflet";
 import {useDispatch} from "react-redux";
 import {mapCreateMarker} from "../store/actions/map";
+import {getUserId} from "../services/LocalStorageService";
 
 
 
@@ -54,9 +55,10 @@ const CreateMarker = () => {
     const [lng, setLng] = useState(0);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const dispatch = useDispatch();
+    const userId = getUserId();
 
     const handlerSubmit = () => {
-        const data = {lat,lng,description,date};
+        const data = {lat,lng,description,date,userId};
         dispatch(mapCreateMarker(data));
     };
 

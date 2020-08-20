@@ -22,3 +22,8 @@
 .bottom-map-button {
   width: 10%;
 }
+
+.marker-map {
+  display: flex;
+  flex-direction: column;
+}

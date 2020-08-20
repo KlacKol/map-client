@@ -7,11 +7,14 @@ const api = process.env.REACT_APP_APP_API_URL + '/map';
 
 export const createMarker = async (res) => {
     return await helper(res, 'create');
-
 };
 
 export const generateRandomMarker = async () => {
     return  axios.get(`${api}/generate/random`)
+};
+
+export const deleteMarker = async (id) => {
+    return  axios.delete(`${api}/${id}`)
 };
 
 export const searchOnDate = async (res) => {

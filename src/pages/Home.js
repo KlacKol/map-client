@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from "@material-ui/core/Button";
 import {getFilterMarker} from '../store/actions/map';
+import {getUserId} from "../services/LocalStorageService";
+import {deleteMarker} from "../services/MapService";
 
 
 const mapFilter = {
@@ -17,10 +19,13 @@ const Home = () => {
     const dispatch = useDispatch();
     const mapRef = useRef();
     const [dateValue, setDateValue] = useState(mapFilter.date);
+    const data = useSelector(res => res.map.markers.data, shallowEqual);
+    const storageUserId = getUserId();
+
     useEffect(() => {
         handleChangeViewPort();
     }, []);
-    const data = useSelector(res => res.map.markers.data, shallowEqual);
+
 
     const handleChangeDateSlider = (event, newValue) => {
         setDateValue(newValue);
@@ -40,6 +45,8 @@ const Home = () => {
         };
         dispatch(getFilterMarker(data));
     };
+
+    const handleDeleteMarker = async (id) => deleteMarker(id);
 
     const handlePlay = () => {
         let i = dateValue[0];
@@ -75,7 +82,17 @@ const Home = () => {
                 {data && data.map(marker => (
                     <Marker position={[marker.lat, marker.lng]} key={marker._id}>
                         <Popup>
-                            {marker.description}
+                            <div className="marker-map">
+                                {marker.description}
+                                {storageUserId && storageUserId === marker.userId ? (
+                                    <Button
+                                        onClick={() => handleDeleteMarker(marker._id)}
+                                        color="secondary"
+                                        size="small"
+                                        variant="contained"
+                                    >delete marker</Button>
+                                ) : null}
+                            </div>
                         </Popup>
                     </Marker>
                 ))}

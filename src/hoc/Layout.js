@@ -122,7 +122,7 @@ const Layout = ({children}) => {
                                 <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" noWrap>
-                                History map
+                                History maps
                             </Typography>
                         </Toolbar>
                     </AppBar>

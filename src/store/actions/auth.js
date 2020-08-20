@@ -1,6 +1,13 @@
 import {AUTH_ERROR, AUTH_SUCCESS, AUTH_START_LOAD, AUTH_LOGOUT} from "./actionTypes";
 import {deleteRefreshToken, loginUser, registerUser} from "../../services/AuthService";
-import {clearRefreshToken, clearToken, getToken, setRefreshToken, setToken} from "../../services/LocalStorageService";
+import {
+    clearRefreshToken,
+    clearToken, clearUserId,
+    getToken,
+    setRefreshToken,
+    setToken,
+    setUserId
+} from "../../services/LocalStorageService";
 import {history} from "../../helpers/history";
 import {PATH_AUTH_LOGIN, PATH_HOME} from "../../routeList";
 import jwtDecode from "jwt-decode";
@@ -11,10 +18,10 @@ export function logUser(parameters) {
             dispatch(userStartLoading());
             loginUser(parameters)
                 .then(({data}) => {
+                    setUserId(data.userId);
                     setToken(data.token);
                     setRefreshToken(data.refreshToken);
-                    const token = getToken();
-                    dispatch(authSuccess(token));
+                    dispatch(authSuccess(data.token));
                     history.push(PATH_HOME)
             })
                 .catch(e => dispatch(userError(e)))
@@ -30,8 +37,10 @@ export function regUser(parameters) {
             dispatch(userStartLoading());
             registerUser(parameters)
                 .then(({data}) => {
+                    setUserId(data.userId);
                     setToken(data.token);
-                    dispatch(authSuccess(data));
+                    setRefreshToken(data.refreshToken);
+                    dispatch(authSuccess(data.token));
                     history.push(PATH_HOME)
                 })
                 .catch(e => dispatch(userError(e)))
@@ -48,6 +57,7 @@ export function logoutUser() {
             const {userId} = jwtDecode(token);
             deleteRefreshToken(userId)
                 .then(() => {
+                    clearUserId();
                     clearToken();
                     clearRefreshToken();
                     dispatch(logout());
