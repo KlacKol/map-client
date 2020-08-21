@@ -90,8 +90,7 @@ const Layout = ({children}) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
-    const token = useSelector(res => res.user.loggedIn, shallowEqual);
-
+    const user = useSelector(res => res.user, shallowEqual);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -100,9 +99,14 @@ const Layout = ({children}) => {
         setOpen(false);
     };
 
+    const handleLogoutUser = () => {
+        handleDrawerClose();
+        dispatch(logoutUser());
+    }
+
     return (
         <div className={classes.root}>
-            {token ? (
+            {user.loggedIn ? (
                 <>
                     <CssBaseline />
                     <AppBar
@@ -142,15 +146,15 @@ const Layout = ({children}) => {
                         </div>
                         <Divider />
                         <List>
-                            <ListItem button component={Link} to={PATH_HOME}>
+                            <ListItem button component={Link} onClick={handleDrawerClose} to={PATH_HOME}>
                                 <ListItemIcon><HomeIcon/></ListItemIcon>
                                 <ListItemText primary="Home" />
                             </ListItem>
-                            <ListItem button component={Link} to={PATH_ADD_MARKER}>
+                            <ListItem button component={Link} onClick={handleDrawerClose} to={PATH_ADD_MARKER}>
                                 <ListItemIcon><AddIcon/></ListItemIcon>
                                 <ListItemText primary="Add new marker" />
                             </ListItem>
-                            <ListItem button onClick={() => dispatch(logoutUser())}>
+                            <ListItem button onClick={handleLogoutUser}>
                                 <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                                 <ListItemText primary="Logout" />
                             </ListItem>

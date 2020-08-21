@@ -46,7 +46,10 @@ const Home = () => {
         dispatch(getFilterMarker(data));
     };
 
-    const handleDeleteMarker = async (id) => deleteMarker(id);
+    const handleDeleteMarker = async (id) => {
+        await deleteMarker(id);
+        await handleChangeViewPort();
+    };
 
     const handlePlay = () => {
         let i = dateValue[0];
